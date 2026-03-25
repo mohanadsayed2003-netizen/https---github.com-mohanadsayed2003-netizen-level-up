@@ -1,0 +1,106 @@
+ body {
+     font-family: 'Comic Neue', cursive;
+     background-color: #FFE8AC;
+ }
+
+ .title-font {
+     font-family: 'Fredoka One', cursive;
+ }
+
+ .hero-bg {
+     background: linear-gradient(135deg, #96C834 0%, #1BA0C4 100%);
+ }
+
+ .game-card:hover {
+     transform: scale(1.05);
+     transition: all 0.3s ease;
+ }
+
+ .btn-primary {
+     background-color: #F9A81C;
+     transition: all 0.3s ease;
+ }
+
+ .btn-primary:hover {
+     background-color: #e6950a;
+     transform: translateY(-2px);
+ }
+
+ .btn-secondary {
+     background-color: #96C834;
+     transition: all 0.3s ease;
+ }
+
+ .btn-secondary:hover {
+     background-color: #82b02a;
+     transform: translateY(-2px);
+ }
+
+ .floating {
+     animation: floating 3s ease-in-out infinite;
+ }
+
+ @keyframes floating {
+     0% {
+         transform: translateY(0px);
+     }
+
+     50% {
+         transform: translateY(-10px);
+     }
+
+     100% {
+         transform: translateY(0px);
+     }
+ }
+
+ .bounce {
+     animation: bounce 2s infinite;
+ }
+
+ @keyframes bounce {
+
+     0%,
+     20%,
+     50%,
+     80%,
+     100% {
+         transform: translateY(0);
+     }
+
+     40% {
+         transform: translateY(-20px);
+     }
+
+     60% {
+         transform: translateY(-10px);
+     }
+ }
+
+ .logo {
+
+     border-radius: 50%;
+     width: 120px;
+     height: 120px;
+     object-fit: cover;
+     display: block;
+     border: 3px solid #ffffff;
+     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+ }
+
+ #auth-modal {
+     transition: all 0.3s ease;
+ }
+
+ #login-form-container,
+ #signup-form-container {
+     transition: all 0.3s ease;
+ }
+
+ .contact-info-item {
+     transition: all 0.3s ease;
+ }
+
+ .contact-info-item:hover {
+     transform: translateX(5px);
+ }
