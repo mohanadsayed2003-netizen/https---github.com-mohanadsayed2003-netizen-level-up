@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Math Puzzle Challenge</title>
+  <style>
+    body {
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      background: linear-gradient(to right, #b2ebf2, #dcedc8);
+      text-align: center;
+      padding: 20px;
+    }
+
+    h1 {
+      color: #00695c;
+      font-size: 3em;
+    }
+
+    #question {
+      font-size: 24px;
+      color: #004d40;
+      margin: 20px 0;
+    }
+
+    #grid {
+      display: grid;
+      grid-template-columns: repeat(4, 80px);
+      gap: 10px;
+      justify-content: center;
+      margin-top: 20px;
+    }
+
+    .tile {
+      width: 80px;
+      height: 80px;
+      background-color: #e0f2f1;
+      border: 2px solid #00796b;
+      border-radius: 10px;
+      font-size: 24px;
+      color: #004d40;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background-color 0.2s, transform 0.2s;
+    }
+
+    .tile:hover {
+      background-color: #80cbc4;
+      transform: scale(1.1);
+    }
+
+    #feedback {
+      font-size: 20px;
+      margin-top: 15px;
+      color: #1b5e20;
+      height: 30px;
+    }
+
+    button {
+      margin-top: 20px;
+      padding: 10px 20px;
+      font-size: 18px;
+      background-color: #4db6ac;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #00796b;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Math Puzzle Challenge</h1>
+  <div id="question">What is 3 + 4?</div>
+  <div id="grid"></div>
+  <div id="feedback"></div>
+  <button onclick="generatePuzzle()">New Puzzle</button>
+
+  <script>
+    const grid = document.getElementById('grid');
+    const questionEl = document.getElementById('question');
+    const feedbackEl = document.getElementById('feedback');
+
+    let correctAnswer = 0;
+
+    function generatePuzzle() {
+      grid.innerHTML = '';
+      feedbackEl.textContent = '';
+
+      const num1 = Math.floor(Math.random() * 10);
+      const num2 = Math.floor(Math.random() * 10);
+      const operators = ['+', '-', '×'];
+      const operator = operators[Math.floor(Math.random() * operators.length)];
+
+      switch (operator) {
+        case '+': correctAnswer = num1 + num2; break;
+        case '-': correctAnswer = num1 - num2; break;
+        case '×': correctAnswer = num1 * num2; break;
+      }
+
+      questionEl.textContent = `What is ${num1} ${operator} ${num2}?`;
+
+      // Generate 8 answer options
+      const answers = new Set();
+      answers.add(correctAnswer);
+      while (answers.size < 8) {
+        answers.add(Math.floor(Math.random() * 20) - 5);
+      }
+
+      const shuffledAnswers = Array.from(answers).sort(() => Math.random() - 0.5);
+
+      shuffledAnswers.forEach(answer => {
+        const tile = document.createElement('div');
+        tile.classList.add('tile');
+        tile.textContent = answer;
+        tile.onclick = () => {
+          if (answer === correctAnswer) {
+            feedbackEl.textContent = '🎉 Correct!';
+            feedbackEl.style.color = '#2e7d32';
+          } else {
+            feedbackEl.textContent = '❌ Try again!';
+            feedbackEl.style.color = '#c62828';
+          }
+        };
+        grid.appendChild(tile);
+      });
+    }
+
+    // Load the first puzzle
+    generatePuzzle();
+  </script>
+
+</body>
+</html>

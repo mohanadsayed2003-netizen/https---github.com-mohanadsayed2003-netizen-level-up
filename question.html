@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Trivia Master</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to right, #b3e5fc, #dcedc8);
+      margin: 0;
+      padding: 20px;
+      color: #004d40;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    h1 {
+      font-size: 3em;
+      color: #00695c;
+      margin-bottom: 10px;
+    }
+
+    .game-box {
+      background-color: #ffffffcc;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+      max-width: 600px;
+      width: 90%;
+      text-align: center;
+    }
+
+    .question {
+      font-size: 1.5em;
+      margin-bottom: 20px;
+    }
+
+    .options {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .option {
+      background-color: #4db6ac;
+      color: white;
+      border: none;
+      padding: 12px;
+      font-size: 1em;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    .option:hover {
+      background-color: #00796b;
+    }
+
+    .score, .timer {
+      margin-top: 20px;
+      font-size: 1.2em;
+      font-weight: bold;
+    }
+
+    .feedback {
+      margin-top: 15px;
+      font-size: 1.1em;
+    }
+
+    .restart {
+      margin-top: 25px;
+      display: none;
+      padding: 10px 20px;
+      font-size: 1em;
+      background-color: #64dd17;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🧠 Trivia Master</h1>
+  <div class="game-box">
+    <div class="question" id="question">Loading question...</div>
+    <div class="options" id="options"></div>
+    <div class="feedback" id="feedback"></div>
+    <div class="timer" id="timer">Time Left: 10s</div>
+    <div class="score" id="score">Score: 0</div>
+    <button class="restart" id="restartBtn" onclick="startGame()">Play Again 🔁</button>
+  </div>
+
+  <script>
+    const questions = [
+      {
+        question: "Which country invented tea?",
+        options: ["India", "China", "England", "Japan"],
+        answer: "China"
+      },
+      {
+        question: "What is the capital of Australia?",
+        options: ["Sydney", "Melbourne", "Canberra", "Brisbane"],
+        answer: "Canberra"
+      },
+      {
+        question: "What is the chemical symbol for gold?",
+        options: ["Ag", "Au", "Gd", "Go"],
+        answer: "Au"
+      },
+      {
+        question: "Which planet is closest to the sun?",
+        options: ["Earth", "Mars", "Mercury", "Venus"],
+        answer: "Mercury"
+      },
+      {
+        question: "What year did World War II end?",
+        options: ["1943", "1945", "1947", "1950"],
+        answer: "1945"
+      }
+    ];
+
+    let score = 0;
+    let current = 0;
+    let timer;
+    let timeLeft = 10;
+
+    const questionEl = document.getElementById("question");
+    const optionsEl = document.getElementById("options");
+    const feedbackEl = document.getElementById("feedback");
+    const timerEl = document.getElementById("timer");
+    const scoreEl = document.getElementById("score");
+    const restartBtn = document.getElementById("restartBtn");
+
+    function startGame() {
+      score = 0;
+      current = 0;
+      restartBtn.style.display = "none";
+      scoreEl.textContent = "Score: 0";
+      feedbackEl.textContent = '';
+      loadQuestion();
+    }
+
+    function loadQuestion() {
+      if (current >= questions.length) {
+        questionEl.textContent = "🎉 Quiz Finished!";
+        optionsEl.innerHTML = '';
+        feedbackEl.textContent = `Final Score: ${score} / ${questions.length}`;
+        feedbackEl.style.color = "#00695c";
+        timerEl.textContent = '';
+        restartBtn.style.display = "inline-block";
+        return;
+      }
+
+      const q = questions[current];
+      questionEl.textContent = q.question;
+      optionsEl.innerHTML = '';
+      feedbackEl.textContent = '';
+      timeLeft = 10;
+      timerEl.textContent = `Time Left: ${timeLeft}s`;
+      startTimer();
+
+      q.options.forEach(opt => {
+        const btn = document.createElement("button");
+        btn.className = "option";
+        btn.textContent = opt;
+        btn.onclick = () => {
+          clearInterval(timer);
+          checkAnswer(opt, q.answer);
+        };
+        optionsEl.appendChild(btn);
+      });
+    }
+
+    function checkAnswer(selected, correct) {
+      if (selected === correct) {
+        score++;
+        feedbackEl.textContent = "✅ Correct!";
+        feedbackEl.style.color = "#2e7d32";
+      } else {
+        feedbackEl.textContent = `❌ Wrong! Correct was: ${correct}`;
+        feedbackEl.style.color = "#c62828";
+      }
+
+      scoreEl.textContent = `Score: ${score}`;
+      current++;
+      setTimeout(loadQuestion, 1500);
+    }
+
+    function startTimer() {
+      clearInterval(timer);
+      timer = setInterval(() => {
+        timeLeft--;
+        timerEl.textContent = `Time Left: ${timeLeft}s`;
+        if (timeLeft <= 0) {
+          clearInterval(timer);
+          feedbackEl.textContent = `⏰ Time's up!`;
+          feedbackEl.style.color = "#f57c00";
+          current++;
+          setTimeout(loadQuestion, 1500);
+        }
+      }, 1000);
+    }
+
+    // Start on page load
+    startGame();
+  </script>
+
+</body>
+</html>

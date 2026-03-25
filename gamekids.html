@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>gamekids</title>
+  <style>
+    body {
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      background: linear-gradient(to bottom right, #b2ebf2, #dcedc8);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+      color: #004d40;
+    }
+
+    h1 {
+      font-size: 3em;
+      color: #00695c;
+    }
+
+    .game-box {
+      background: #ffffffcc;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+      text-align: center;
+      max-width: 500px;
+      width: 90%;
+    }
+
+    .color-name {
+      font-size: 2em;
+      margin-bottom: 20px;
+    }
+
+    .color-options {
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .color-button {
+      width: 80px;
+      height: 80px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+
+    .color-button:hover {
+      transform: scale(1.1);
+    }
+
+    .feedback {
+      font-size: 1.3em;
+      margin-top: 15px;
+    }
+
+    .score {
+      margin-top: 20px;
+      font-size: 1.2em;
+      font-weight: bold;
+    }
+
+    .restart {
+      margin-top: 25px;
+      padding: 10px 20px;
+      font-size: 1.1em;
+      background-color: #4db6ac;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🎨 Color Match Challenge</h1>
+  <div class="game-box">
+    <div class="color-name" id="colorName">Loading...</div>
+    <div class="color-options" id="colorOptions"></div>
+    <div class="feedback" id="feedback"></div>
+    <div class="score" id="score">Score: 0</div>
+    <button class="restart" id="restartBtn" onclick="startGame()">Play Again 🔁</button>
+  </div>
+
+  <script>
+    const colors = [
+      { name: "Red", hex: "#e53935" },
+      { name: "Blue", hex: "#1e88e5" },
+      { name: "Green", hex: "#43a047" },
+      { name: "Yellow", hex: "#fdd835" },
+      { name: "Purple", hex: "#8e24aa" },
+      { name: "Orange", hex: "#fb8c00" }
+    ];
+
+    let score = 0;
+    let rounds = 0;
+    const maxRounds = 5;
+
+    const colorNameEl = document.getElementById("colorName");
+    const colorOptionsEl = document.getElementById("colorOptions");
+    const feedbackEl = document.getElementById("feedback");
+    const scoreEl = document.getElementById("score");
+    const restartBtn = document.getElementById("restartBtn");
+
+    function shuffleArray(arr) {
+      return arr.sort(() => Math.random() - 0.5);
+    }
+
+    function startGame() {
+      score = 0;
+      rounds = 0;
+      feedbackEl.textContent = '';
+      restartBtn.style.display = "none";
+      scoreEl.textContent = `Score: ${score}`;
+      nextRound();
+    }
+
+    function nextRound() {
+      if (rounds >= maxRounds) {
+        colorNameEl.textContent = "🎉 Game Over!";
+        colorOptionsEl.innerHTML = '';
+        feedbackEl.textContent = `Final Score: ${score} / ${maxRounds}`;
+        feedbackEl.style.color = "#00695c";
+        restartBtn.style.display = "inline-block";
+        return;
+      }
+
+      const shuffledColors = shuffleArray([...colors]);
+      const target = shuffledColors[Math.floor(Math.random() * shuffledColors.length)];
+
+      colorNameEl.textContent = `Click the color: ${target.name}`;
+      colorNameEl.style.color = "#004d40";
+      colorOptionsEl.innerHTML = '';
+
+      shuffledColors.forEach(color => {
+        const btn = document.createElement("button");
+        btn.className = "color-button";
+        btn.style.backgroundColor = color.hex;
+        btn.onclick = () => checkAnswer(color.name, target.name);
+        colorOptionsEl.appendChild(btn);
+      });
+    }
+
+    function checkAnswer(selected, correct) {
+      if (selected === correct) {
+        feedbackEl.textContent = "✅ Correct!";
+        feedbackEl.style.color = "#2e7d32";
+        score++;
+      } else {
+        feedbackEl.textContent = `❌ Oops! That was ${selected}.`;
+        feedbackEl.style.color = "#c62828";
+      }
+      rounds++;
+      scoreEl.textContent = `Score: ${score}`;
+      setTimeout(nextRound, 1000);
+    }
+
+    // Start game on load
+    startGame();
+  </script>
+</body>
+</html>
+
